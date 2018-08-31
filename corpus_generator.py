@@ -1,8 +1,8 @@
-import random
+from random import shuffle
 from nltk import word_tokenize
 from nltk.corpus import stopwords
-import string
-from math import ceil, floor
+from string import punctuation
+from math import floor
 # import nltk
 # nltk.download("punkt")
 # nltk.download('stopwords')
@@ -34,11 +34,12 @@ opensubs = list(zip(opensubs_en, opensubs_ja))
 # print(opensubs[:5])
 # print(opensubs[-5:])
 custom = jesc + opensubs
-random.shuffle(custom)
+shuffle(custom)
 
-en_stop = stopwords.words("english") + list(string.punctuation)
+en_stop = set(stopwords.words("english"))
+punctuation_table = str.maketrans(dict.fromkeys(punctuation))
 # https://github.com/stopwords-iso/stopwords-ja/blob/master/stopwords-ja.txt
-ja_stop = ["あそこ", "あっ", "あの", "あのかた", "あの人", "あり", "あります", "ある", "あれ", "い", "いう", "います", "いる", "う",
+ja_stop = {"あそこ", "あっ", "あの", "あのかた", "あの人", "あり", "あります", "ある", "あれ", "い", "いう", "います", "いる", "う",
            "うち", "え", "お", "および", "おり", "おります", "か", "かつて", "から", "が", "き", "ここ", "こちら", "こと", "この",
            "これ", "これら", "さ", "さらに", "し", "しかし", "する", "ず", "せ", "せる", "そこ", "そして", "その", "その他",
            "その後", "それ", "それぞれ", "それで", "た", "ただし", "たち", "ため", "たり", "だ", "だっ", "だれ", "つ", "て", "で",
@@ -47,22 +48,18 @@ ja_stop = ["あそこ", "あっ", "あの", "あのかた", "あの人", "あり
            "なる", "なん", "に", "において", "における", "について", "にて", "によって", "により", "による", "に対して", "に対する",
            "に関する", "の", "ので", "のみ", "は", "ば", "へ", "ほか", "ほとんど", "ほど", "ます", "また", "または", "まで", "も",
            "もの", "ものの", "や", "よう", "より", "ら", "られ", "られる", "れ", "れる", "を", "ん", "何", "及び", "彼", "彼女",
-           "我々", "特に", "私", "私達", "貴方", "貴方方"]
+           "我々", "特に", "私", "私達", "貴方", "貴方方"}
 
-# 90% of corpora
-train_len = ceil(0.9 * len(custom))
-# 5% of corpora
-val_len = ceil((len(custom) - train_len) / 2)
-# 5% of corpora
-test_len = floor((len(custom) - train_len) / 2)
+val_len = 5000
+test_len = floor(len(custom) * 0.05)
+train_len = len(custom) - val_len - test_len
 
 
 def custom_tokenize(pair, en_corpus, ja_corpus, mecab):
     # This function is very specific and was only made to avoid repetition in the code below where it is called 3 times
-    en_no_stop = " ".join([word for word in word_tokenize(pair[0].lower()) if word not in en_stop and len(word) > 2])
-    for i in list(string.punctuation):
-        # Further cleaning
-        en_no_stop = en_no_stop.replace(i, "")
+    en_no_stop = " ".join([word.translate(punctuation_table) for word in word_tokenize(pair[0].lower())
+                           if word.translate(punctuation_table) not in en_stop
+                           and len(word.translate(punctuation_table)) > 2])
     en_corpus.write(en_no_stop)
     en_corpus.write("\n")
     ja_tokenized = []
@@ -70,7 +67,7 @@ def custom_tokenize(pair, en_corpus, ja_corpus, mecab):
         if n.is_nor():
             pos = n.feature.split(",")
             # Removes punctuation and unnecessary symbols hopefully
-            # Index will only work if MeCab has been declared as MeCab(r"-F%m,%f[0]")
+            # Indexes below will only work if MeCab has been declared as MeCab(r"-F%m,%f[0]")
             if pos[1] != "記号" and pos[0] not in ja_stop:
                 ja_tokenized.append(pos[0])
     ja_corpus.write(" ".join(ja_tokenized))
