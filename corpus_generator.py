@@ -5,7 +5,7 @@ from string import punctuation
 from math import floor
 # import nltk
 # nltk.download("punkt")
-# nltk.download('stopwords')
+# nltk.download("stopwords")
 from natto import MeCab
 import os
 
@@ -55,14 +55,55 @@ test_len = floor(len(custom) * 0.05)
 train_len = len(custom) - val_len - test_len
 
 
-def custom_tokenize(pair, en_corpus, ja_corpus, mecab):
-    # This function is very specific and was only made to avoid repetition in the code below where it is called 3 times
+def stop_tokenize(pair, en_corpus, ja_corpus, mecab):
+    # Removes punctuation
+    en_no_stop = " ".join([word for word in word_tokenize(pair[0].lower().translate(punctuation_table))])
+    ja_tokenized = []
+    # Removes symbols
+    for n in mecab.parse(pair[1], as_nodes=True):
+        if n.is_nor():
+            pos = n.feature.split(",")
+            # Removes punctuation and unnecessary symbols hopefully
+            # Indexes below will only work if MeCab has been declared as MeCab(r"-F%m,%f[0]")
+            if pos[1] != "記号":
+                ja_tokenized.append(pos[0])
+    ja_tokenized = " ".join(ja_tokenized)
+    if not(en_no_stop == "" or ja_tokenized == ""):
+        en_corpus.write(en_no_stop)
+        en_corpus.write("\n")
+        ja_corpus.write(ja_tokenized)
+        ja_corpus.write("\n")
+
+
+def ja_stop_tokenize(pair, en_corpus, ja_corpus, mecab):
+    # Removes punctuation and stop words
     en_no_stop = " ".join([word.translate(punctuation_table) for word in word_tokenize(pair[0].lower())
                            if word.translate(punctuation_table) not in en_stop
                            and len(word.translate(punctuation_table)) > 2])
-    en_corpus.write(en_no_stop)
-    en_corpus.write("\n")
     ja_tokenized = []
+    # Removes symbols
+    for n in mecab.parse(pair[1], as_nodes=True):
+        if n.is_nor():
+            pos = n.feature.split(",")
+            # Removes punctuation and unnecessary symbols hopefully
+            # Indexes below will only work if MeCab has been declared as MeCab(r"-F%m,%f[0]")
+            if pos[1] != "記号":
+                ja_tokenized.append(pos[0])
+    ja_tokenized = " ".join(ja_tokenized)
+    if not(en_no_stop == "" or ja_tokenized == ""):
+        en_corpus.write(en_no_stop)
+        en_corpus.write("\n")
+        ja_corpus.write(ja_tokenized)
+        ja_corpus.write("\n")
+
+
+def no_stop_tokenize(pair, en_corpus, ja_corpus, mecab):
+    # Removes punctuation and stop words
+    en_no_stop = " ".join([word.translate(punctuation_table) for word in word_tokenize(pair[0].lower())
+                           if word.translate(punctuation_table) not in en_stop
+                           and len(word.translate(punctuation_table)) > 2])
+    ja_tokenized = []
+    # Removes symbols and stop words
     for n in mecab.parse(pair[1], as_nodes=True):
         if n.is_nor():
             pos = n.feature.split(",")
@@ -70,20 +111,62 @@ def custom_tokenize(pair, en_corpus, ja_corpus, mecab):
             # Indexes below will only work if MeCab has been declared as MeCab(r"-F%m,%f[0]")
             if pos[1] != "記号" and pos[0] not in ja_stop:
                 ja_tokenized.append(pos[0])
-    ja_corpus.write(" ".join(ja_tokenized))
-    ja_corpus.write("\n")
+    ja_tokenized = " ".join(ja_tokenized)
+    if not(en_no_stop == "" or ja_tokenized == ""):
+        en_corpus.write(en_no_stop)
+        en_corpus.write("\n")
+        ja_corpus.write(ja_tokenized)
+        ja_corpus.write("\n")
 
 
-with open("corpora/subs_custom/raw/en_train.txt", "w", encoding="utf-8") as en_train, \
-        open("corpora/subs_custom/raw/ja_train.txt", "w", encoding="utf-8") as ja_train, \
-        open("corpora/subs_custom/raw/en_val.txt", "w", encoding="utf-8") as en_val, \
-        open("corpora/subs_custom/raw/ja_val.txt", "w", encoding="utf-8") as ja_val, \
-        open("corpora/subs_custom/raw/en_test.txt", "w", encoding="utf-8") as en_test, \
-        open("corpora/subs_custom/raw/ja_test.txt", "w", encoding="utf-8") as ja_test, \
-        MeCab(r"-F%m,%f[0]") as nm:
-    for pair in custom[:train_len]:
-        custom_tokenize(pair, en_train, ja_train, nm)
-    for pair in custom[train_len:train_len + val_len]:
-        custom_tokenize(pair, en_val, ja_val, nm)
-    for pair in custom[train_len + val_len:train_len + val_len + test_len]:
-        custom_tokenize(pair, en_test, ja_test, nm)
+def gen_stop():
+    with open("corpora/subs_custom/stop/raw/en_train.txt", "w", encoding="utf-8") as en_train, \
+            open("corpora/subs_custom/stop/raw/ja_train.txt", "w", encoding="utf-8") as ja_train, \
+            open("corpora/subs_custom/stop/raw/en_val.txt", "w", encoding="utf-8") as en_val, \
+            open("corpora/subs_custom/stop/raw/ja_val.txt", "w", encoding="utf-8") as ja_val, \
+            open("corpora/subs_custom/stop/raw/en_test.txt", "w", encoding="utf-8") as en_test, \
+            open("corpora/subs_custom/stop/raw/ja_test.txt", "w", encoding="utf-8") as ja_test, \
+            MeCab(r"-F%m,%f[0]") as nm:
+        for pair in custom[:train_len]:
+            stop_tokenize(pair, en_train, ja_train, nm)
+        for pair in custom[train_len:train_len + val_len]:
+            stop_tokenize(pair, en_val, ja_val, nm)
+        for pair in custom[train_len + val_len:train_len + val_len + test_len]:
+            stop_tokenize(pair, en_test, ja_test, nm)
+
+
+def gen_ja_stop():
+    with open("corpora/subs_custom/ja_stop/raw/en_train.txt", "w", encoding="utf-8") as en_train, \
+            open("corpora/subs_custom/ja_stop/raw/ja_train.txt", "w", encoding="utf-8") as ja_train, \
+            open("corpora/subs_custom/ja_stop/raw/en_val.txt", "w", encoding="utf-8") as en_val, \
+            open("corpora/subs_custom/ja_stop/raw/ja_val.txt", "w", encoding="utf-8") as ja_val, \
+            open("corpora/subs_custom/ja_stop/raw/en_test.txt", "w", encoding="utf-8") as en_test, \
+            open("corpora/subs_custom/ja_stop/raw/ja_test.txt", "w", encoding="utf-8") as ja_test, \
+            MeCab(r"-F%m,%f[0]") as nm:
+        for pair in custom[:train_len]:
+            ja_stop_tokenize(pair, en_train, ja_train, nm)
+        for pair in custom[train_len:train_len + val_len]:
+            ja_stop_tokenize(pair, en_val, ja_val, nm)
+        for pair in custom[train_len + val_len:train_len + val_len + test_len]:
+            ja_stop_tokenize(pair, en_test, ja_test, nm)
+
+
+def gen_no_stop():
+    with open("corpora/subs_custom/no_stop/raw/en_train.txt", "w", encoding="utf-8") as en_train, \
+            open("corpora/subs_custom/no_stop/raw/ja_train.txt", "w", encoding="utf-8") as ja_train, \
+            open("corpora/subs_custom/no_stop/raw/en_val.txt", "w", encoding="utf-8") as en_val, \
+            open("corpora/subs_custom/no_stop/raw/ja_val.txt", "w", encoding="utf-8") as ja_val, \
+            open("corpora/subs_custom/no_stop/raw/en_test.txt", "w", encoding="utf-8") as en_test, \
+            open("corpora/subs_custom/no_stop/raw/ja_test.txt", "w", encoding="utf-8") as ja_test, \
+            MeCab(r"-F%m,%f[0]") as nm:
+        for pair in custom[:train_len]:
+            no_stop_tokenize(pair, en_train, ja_train, nm)
+        for pair in custom[train_len:train_len + val_len]:
+            no_stop_tokenize(pair, en_val, ja_val, nm)
+        for pair in custom[train_len + val_len:train_len + val_len + test_len]:
+            no_stop_tokenize(pair, en_test, ja_test, nm)
+
+
+gen_stop()
+# gen_ja_stop()
+gen_no_stop()
