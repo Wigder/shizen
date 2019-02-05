@@ -1,1 +1,0 @@
-ssh 18R55047@login.t3.gsic.titech.ac.jp -i .ssh\id_rsa
