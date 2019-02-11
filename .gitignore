@@ -177,3 +177,6 @@ fabric.properties
 #
 #	Custom
 #
+
+# Google Drive files
+desktop.ini
