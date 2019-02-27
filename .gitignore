@@ -180,3 +180,10 @@ fabric.properties
 
 # Google Drive files
 desktop.ini
+
+# Corpora
+corpora/
+
+# Outputs
+out/
+
