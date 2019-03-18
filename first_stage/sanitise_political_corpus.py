@@ -2,18 +2,24 @@ import json
 from string import punctuation
 
 
-def pretty_print(list_of_sentences):
-    print(json.dumps(list_of_sentences, indent=2))
+# def pretty_print(list_of_sentences):
+#     print(json.dumps(list_of_sentences, indent=2))
 
 
 def custom_sanitiser(sentence_list):
     # Removing new line symbol and emojis.
-    new = [s.rstrip().encode("ascii", "ignore").decode("ascii").split() for s in sentence_list]
+    new = [s.rstrip().encode("ascii", "ignore").decode("ascii")  # Removing most emojis.
+               .replace("&amp;", "&")  # Decoding ampersands.
+               .replace("&lt; 3", "heartemoji")  # Decoding heart emojis.
+               .replace(" &apos;", "")  # Decoding apostrophes.
+               .replace("&quot;", "")  # Decoding quotes.
+               .replace("&gt;", "")  # Decoding >.
+               .replace("&lt;", "")  # Decoding <.
+               .split() for s in sentence_list]
     for s in range(len(new)):
-        new[s] = [t for t in new[s] if ((not (new[s].index(t) == 0 and t in ["democratic", "republican"]))
-                                        and "&apos;" not in t  # Removing apostrophes.
-                                        and not any(p in t for p in punctuation))]  # Removing punctuation.
-    new = [" ".join(s) for s in new]
+        new[s] = [word.translate(str.maketrans('', '', punctuation)) for index, word in (enumerate(new[s]))
+                  if index != 0]
+    new = [" ".join(filter(None, s)) for s in new]
     list(filter(lambda s: s != "", new))
 
     return new
