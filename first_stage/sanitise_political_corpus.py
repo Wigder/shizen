@@ -9,16 +9,16 @@ from string import punctuation
 def custom_sanitiser(sentence_list):
     # Removing new line symbol and emojis.
     new = [s.rstrip().encode("ascii", "ignore").decode("ascii")  # Removing most emojis.
-               .replace("&amp;", "&")  # Decoding ampersands.
-               .replace("&lt; 3", "heartemoji")  # Decoding heart emojis.
-               .replace(" &apos;", "")  # Decoding apostrophes.
-               .replace("&quot;", "")  # Decoding quotes.
-               .replace("&gt;", "")  # Decoding >.
-               .replace("&lt;", "")  # Decoding <.
-               .split() for s in sentence_list]
+            .replace("&amp;", "&")  # Decoding ampersands.
+            .replace("&lt; 3", "heartemoji")  # Decoding heart emojis.
+            .replace(" &apos;", "")  # Decoding apostrophes.
+            .replace("&quot;", "")  # Decoding quotes.
+            .replace("&gt;", "")  # Decoding >.
+            .replace("&lt;", "")  # Decoding <.
+            .split() for s in sentence_list]
     for s in range(len(new)):
         new[s] = [word.translate(str.maketrans('', '', punctuation)) for index, word in (enumerate(new[s]))
-                  if index != 0]
+                  if index != 0]  # Removing punctuation and "republican"/"democrat" label.
     new = [" ".join(filter(None, s)) for s in new]
     list(filter(lambda s: s != "", new))
 
