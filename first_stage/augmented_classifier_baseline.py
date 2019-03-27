@@ -2,6 +2,7 @@ import pickle
 from random import shuffle
 
 import numpy as np
+from gensim.models import Word2Vec
 from keras import Sequential
 from keras.layers import Embedding, Conv1D, Dense, GlobalMaxPooling1D
 from keras.preprocessing.sequence import pad_sequences
@@ -27,7 +28,7 @@ sequence_length = int(ceil(max(len(s) for s, _ in data) / multiple) * multiple)
 tokenizer = Tokenizer()
 tokenizer.fit_on_texts([s for s, _ in data])
 
-# Establishing padded and sequencified data sets as well as their respective labels.
+# Establishing padded and senquecified data sets as well as their respective labels.
 train = dem_train + rep_train
 shuffle(train)
 x_train = pad_sequences(tokenizer.texts_to_sequences([s for s, _ in train]), maxlen=sequence_length)
@@ -37,9 +38,18 @@ shuffle(test)
 x_test = pad_sequences(tokenizer.texts_to_sequences([s for s, _ in test]), maxlen=sequence_length)
 y_test = np.asarray([l for _, l in test])
 
+# Loading pre-trained word embeddings and assigning them to their respective generated indices.
+w2v_model = Word2Vec.load("out/augmented_word_embeddings.model")
+vocab_size = len(tokenizer.word_index) + 1
+dimensions = 101
+embeddings = np.zeros((vocab_size, dimensions))
+for w, i in tokenizer.word_index.items():
+    if w in w2v_model.wv.vocab:
+        embeddings[i] = w2v_model.wv.syn0[w2v_model.wv.vocab[w].index]
+
 # Building architecture.
 model = Sequential()
-model.add(Embedding(len(tokenizer.word_index) + 1, 101, input_length=sequence_length))
+model.add(Embedding(vocab_size, dimensions, weights=[embeddings], input_length=sequence_length, trainable=False))
 model.add(Conv1D(128, 5, activation="relu"))
 model.add(GlobalMaxPooling1D())
 model.add(Dense(10, activation="relu"))
@@ -49,6 +59,6 @@ model.summary()
 
 history = model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=5, batch_size=128)
 
-model.save("out/simple_classifier.h5")
-with open("out/simple_classifier_history.pickle", "wb") as f:
+model.save("out/augmented_classifier_baseline.h5")
+with open("out/augmented_classifier_baseline_history.pickle", "wb") as f:
     pickle.dump(history, f, pickle.HIGHEST_PROTOCOL)

@@ -19,8 +19,8 @@ with open("out/uninformed_z_scores.pickle", "rb") as f:
 uninf_dem = [(w, z) for w, z in uninf if z > 0]
 uninf_rep = [(w, z) for w, z in uninf if z < 0]
 dem_trace = go.Scatter(
-    x=[word_freq[w] for w, z in uninf_dem],
-    y=[z for w, z in uninf_dem],
+    x=[word_freq[w] for w, _ in uninf_dem],
+    y=[z for _, z in uninf_dem],
     name="Democrat",
     mode="markers",
     marker=dict(
@@ -28,8 +28,8 @@ dem_trace = go.Scatter(
     )
 )
 rep_trace = go.Scatter(
-    x=[word_freq[w] for w, z in uninf_rep],
-    y=[z for w, z in uninf_rep],
+    x=[word_freq[w] for w, _ in uninf_rep],
+    y=[z for _, z in uninf_rep],
     name="Republican",
     mode="markers",
     marker=dict(
@@ -65,28 +65,28 @@ uninf_sample_rep = [(w, uninf_dict[w]) for w in
                      "reid"]]
 
 dem_trace_sample = go.Scatter(
-    x=[word_freq[w] for w, z in uninf_sample_dem],
-    y=[z for w, z in uninf_sample_dem],
+    x=[word_freq[w] for w, _ in uninf_sample_dem],
+    y=[z for _, z in uninf_sample_dem],
     name="Democrat",
     mode="markers+text",
     marker=dict(
         color="steelblue"
     ),
-    text=[w for w, z in uninf_sample_dem],
+    text=[w for w, _ in uninf_sample_dem],
     textposition="middle right",
     textfont=dict(
         size=11
     )
 )
 rep_trace_sample = go.Scatter(
-    x=[word_freq[w] for w, z in uninf_sample_rep],
-    y=[z for w, z in uninf_sample_rep],
+    x=[word_freq[w] for w, _ in uninf_sample_rep],
+    y=[z for _, z in uninf_sample_rep],
     name="Republican",
     mode="markers+text",
     marker=dict(
         color="firebrick"
     ),
-    text=[w for w, z in uninf_sample_rep],
+    text=[w for w, _ in uninf_sample_rep],
     textposition="middle right",
     textfont=dict(
         size=11
