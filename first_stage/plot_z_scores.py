@@ -4,9 +4,9 @@ from collections import Counter
 import plotly.graph_objs as go
 import plotly.offline as py
 
-with open("corpora/political/sanitised/dem_train.txt", encoding="utf-8") as f:
+with open("corpora/political/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
     dem_train = [s.rstrip() for s in f.readlines()]
-with open("corpora/political/sanitised/rep_train.txt", encoding="utf-8") as f:
+with open("corpora/political/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
     rep_train = [s.rstrip() for s in f.readlines()]
 
 word_freq = dict(Counter(" ".join(dem_train + rep_train).split()).most_common())
@@ -50,8 +50,8 @@ layout = go.Layout(
     font=dict(family="Calibri"),
     showlegend=True
 )
-fig_sample = go.Figure(data=[dem_trace, rep_trace], layout=layout)
-py.plot(fig_sample, filename="out/fightin_words.html")
+fig = go.Figure(data=[dem_trace, rep_trace], layout=layout)
+py.plot(fig, filename="out/fightin_words.html")
 
 # Sample plot
 uninf_dict = dict(uninf)

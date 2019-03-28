@@ -13,15 +13,15 @@ common_words = ["the", "to", "and", "you", "of", "for", "a", "is", "in", "i", "t
 Common words were handpicked from the top 500 common words.
 """
 
-with open("corpora/political/sanitised/dem_train.txt", encoding="utf-8") as f:
+with open("corpora/political/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
     dem_train = [s.rstrip() for s in f.readlines()]
-with open("corpora/political/sanitised/rep_train.txt", encoding="utf-8") as f:
+with open("corpora/political/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
     rep_train = [s.rstrip() for s in f.readlines()]
 
-word_count = dict(Counter(" ".join(dem_train + rep_train).split()).most_common())
+word_freq = dict(Counter(" ".join(dem_train + rep_train).split()).most_common())
 
-priors = {w: 1.0 / word_count[w] for w in common_words}
-for w in word_count:
+priors = {w: 1.0 / word_freq[w] for w in common_words}
+for w in word_freq:
     if w not in priors:
         priors[w] = .05
 

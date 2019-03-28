@@ -4,23 +4,24 @@ from random import shuffle
 import numpy as np
 from gensim.models import Word2Vec
 from keras import Sequential
-from keras.layers import Embedding, Conv1D, Dense, GlobalMaxPooling1D
+from keras.layers import Embedding, Conv1D, GlobalMaxPooling1D, Dense
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from math import ceil
 
 # Loading and labelling data.
-with open("corpora/political/sanitised/dem_train.txt", encoding="utf-8") as f:
+with open("corpora/political/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
     dem_train = [(s.rstrip().split(), 1) for s in f.readlines()]
-with open("corpora/political/sanitised/rep_train.txt", encoding="utf-8") as f:
+with open("corpora/political/resplit/sanitised/dem_val.txt", encoding="utf-8") as f:
+    dem_val = [(s.rstrip().split(), 1) for s in f.readlines()]
+with open("corpora/political/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
     rep_train = [(s.rstrip().split(), 0) for s in f.readlines()]
-with open("corpora/political/sanitised/dem_test.txt", encoding="utf-8") as f:
-    dem_test = [(s.rstrip().split(), 1) for s in f.readlines()]
-with open("corpora/political/sanitised/rep_test.txt", encoding="utf-8") as f:
-    rep_test = [(s.rstrip().split(), 0) for s in f.readlines()]
-data = dem_train + rep_train + dem_test + rep_test
+with open("corpora/political/resplit/sanitised/rep_val.txt", encoding="utf-8") as f:
+    rep_val = [(s.rstrip().split(), 0) for s in f.readlines()]
 
-# Calculating max sentence length.
+data = dem_train + dem_val + rep_train + rep_val
+
+# Calculating max sentence length and rounding to nearest multiple of 50.
 multiple = 50.0
 sequence_length = int(ceil(max(len(s) for s, _ in data) / multiple) * multiple)
 
@@ -28,15 +29,15 @@ sequence_length = int(ceil(max(len(s) for s, _ in data) / multiple) * multiple)
 tokenizer = Tokenizer()
 tokenizer.fit_on_texts([s for s, _ in data])
 
-# Establishing padded and senquecified data sets as well as their respective labels.
+# Establishing padded and sequencified data sets as well as their respective labels.
 train = dem_train + rep_train
 shuffle(train)
 x_train = pad_sequences(tokenizer.texts_to_sequences([s for s, _ in train]), maxlen=sequence_length)
 y_train = np.asarray([l for _, l in train])
-test = dem_test + rep_test
-shuffle(test)
-x_test = pad_sequences(tokenizer.texts_to_sequences([s for s, _ in test]), maxlen=sequence_length)
-y_test = np.asarray([l for _, l in test])
+val = dem_val + rep_val
+shuffle(val)
+x_val = pad_sequences(tokenizer.texts_to_sequences([s for s, _ in val]), maxlen=sequence_length)
+y_val = np.asarray([l for _, l in val])
 
 # Loading pre-trained word embeddings and assigning them to their respective generated indices.
 w2v_model = Word2Vec.load("out/augmented_word_embeddings.model")
@@ -57,7 +58,7 @@ model.add(Dense(1, activation="sigmoid"))
 model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
 model.summary()
 
-history = model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=5, batch_size=128)
+history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=10, batch_size=128)
 
 model.save("out/augmented_classifier_baseline.h5")
 with open("out/augmented_classifier_baseline_history.pickle", "wb") as f:
