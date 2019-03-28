@@ -3,7 +3,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from math import ceil
 
-model_path = "out/augmented_classifier_trainable_embed.h5"
+model_path = ""
 
 # Loading data.
 with open("corpora/political/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
