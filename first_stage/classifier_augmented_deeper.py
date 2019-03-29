@@ -3,7 +3,6 @@ from random import shuffle
 
 import numpy as np
 from gensim.models import Word2Vec
-from keras.callbacks import ModelCheckpoint
 from keras.layers import Input, Dense, Embedding, Conv2D, MaxPool2D, Reshape, Flatten, Dropout, Concatenate
 from keras.models import Model
 from keras.optimizers import Adam
@@ -71,15 +70,12 @@ flatten = Flatten()(concatenated_tensor)
 dropout = Dropout(0.5)(flatten)
 output = Dense(units=1, activation="sigmoid")(dropout)
 model = Model(inputs=inputs, outputs=output)
-checkpoint = ModelCheckpoint("weights.{epoch:03d}-{val_acc:.4f}.hdf5", monitor="val_acc", verbose=1,
-                             save_best_only=True)
-adam = Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+adam = Adam(lr=1e-4, epsilon=1e-08)
 model.compile(optimizer=adam, loss="binary_crossentropy", metrics=["accuracy"])
 model.summary()
 
 # Running training.
-history = model.fit(x_train, y_train, batch_size=30, epochs=10, verbose=1, callbacks=[checkpoint],
-                    validation_data=(x_val, y_val))
+history = model.fit(x_train, y_train, batch_size=30, epochs=10, validation_data=(x_val, y_val))
 
 # Saving completed model and training history.
 model.save("out/classifier_augmented_deeper.h5")
