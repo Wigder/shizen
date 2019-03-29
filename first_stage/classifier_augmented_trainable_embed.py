@@ -40,7 +40,7 @@ x_val = pad_sequences(tokenizer.texts_to_sequences([s for s, _ in val]), maxlen=
 y_val = np.asarray([l for _, l in val])
 
 # Loading pre-trained word embeddings and assigning them to their respective generated indices.
-w2v_model = Word2Vec.load("out/augmented_word_embeddings.model")
+w2v_model = Word2Vec.load("out/word_embeddings.model")
 vocab_size = len(tokenizer.word_index) + 1
 dimensions = 101
 embeddings = np.zeros((vocab_size, dimensions))
@@ -50,7 +50,7 @@ for w, i in tokenizer.word_index.items():
 
 # Building architecture.
 model = Sequential()
-model.add(Embedding(vocab_size, dimensions, weights=[embeddings], input_length=sequence_length, trainable=False))
+model.add(Embedding(vocab_size, dimensions, weights=[embeddings], input_length=sequence_length))
 model.add(Conv1D(128, 5, activation="relu"))
 model.add(GlobalMaxPooling1D())
 model.add(Dense(10, activation="relu"))
@@ -58,8 +58,10 @@ model.add(Dense(1, activation="sigmoid"))
 model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
 model.summary()
 
+# Running training.
 history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=10, batch_size=128)
 
-model.save("out/augmented_classifier_baseline.h5")
-with open("out/augmented_classifier_baseline_history.pickle", "wb") as f:
+# Saving completed model and training history.
+model.save("out/classifier_augmented_trainable_embed.h5")
+with open("out/classifier_augmented_trainable_embed_history.pickle", "wb") as f:
     pickle.dump(history, f, pickle.HIGHEST_PROTOCOL)

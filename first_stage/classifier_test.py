@@ -42,7 +42,6 @@ for p in dem_test_predictions:
     if p > 0.5:
         correct += 1
 dem_acc = correct / len(dem_test_predictions)
-
 correct = 0
 for p in rep_test_predictions:
     if p < 0.5:

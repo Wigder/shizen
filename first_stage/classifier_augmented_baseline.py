@@ -2,6 +2,7 @@ import pickle
 from random import shuffle
 
 import numpy as np
+from gensim.models import Word2Vec
 from keras import Sequential
 from keras.layers import Embedding, Conv1D, GlobalMaxPooling1D, Dense
 from keras.preprocessing.sequence import pad_sequences
@@ -38,9 +39,18 @@ shuffle(val)
 x_val = pad_sequences(tokenizer.texts_to_sequences([s for s, _ in val]), maxlen=sequence_length)
 y_val = np.asarray([l for _, l in val])
 
+# Loading pre-trained word embeddings and assigning them to their respective generated indices.
+w2v_model = Word2Vec.load("out/word_embeddings.model")
+vocab_size = len(tokenizer.word_index) + 1
+dimensions = 101
+embeddings = np.zeros((vocab_size, dimensions))
+for w, i in tokenizer.word_index.items():
+    if w in w2v_model.wv.vocab:
+        embeddings[i] = w2v_model.wv.syn0[w2v_model.wv.vocab[w].index]
+
 # Building architecture.
 model = Sequential()
-model.add(Embedding(len(tokenizer.word_index) + 1, 101, input_length=sequence_length))
+model.add(Embedding(vocab_size, dimensions, weights=[embeddings], input_length=sequence_length, trainable=False))
 model.add(Conv1D(128, 5, activation="relu"))
 model.add(GlobalMaxPooling1D())
 model.add(Dense(10, activation="relu"))
@@ -48,8 +58,10 @@ model.add(Dense(1, activation="sigmoid"))
 model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
 model.summary()
 
+# Running training.
 history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=10, batch_size=128)
 
-model.save("out/baseline_classifier.h5")
-with open("out/baseline_classifier_history.pickle", "wb") as f:
+# Saving completed model and training history.
+model.save("out/classifier_augmented_baseline.h5")
+with open("out/classifier_augmented_baseline_history.pickle", "wb") as f:
     pickle.dump(history, f, pickle.HIGHEST_PROTOCOL)

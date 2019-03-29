@@ -1,4 +1,5 @@
 from random import shuffle
+
 from sklearn.model_selection import train_test_split
 
 with open("corpora/political/original/democratic_only.train.en", encoding="utf-8") as f:

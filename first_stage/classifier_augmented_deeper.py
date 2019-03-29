@@ -42,7 +42,7 @@ x_val = pad_sequences(tokenizer.texts_to_sequences([s for s, _ in val]), maxlen=
 y_val = np.asarray([l for _, l in val])
 
 # Loading pre-trained word embeddings and assigning them to their respective generated indices.
-w2v_model = Word2Vec.load("out/augmented_word_embeddings.model")
+w2v_model = Word2Vec.load("out/word_embeddings.model")
 vocab_size = len(tokenizer.word_index) + 1
 dimensions = 101
 embeddings = np.zeros((vocab_size, dimensions))
@@ -77,9 +77,11 @@ adam = Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 model.compile(optimizer=adam, loss="binary_crossentropy", metrics=["accuracy"])
 model.summary()
 
+# Running training.
 history = model.fit(x_train, y_train, batch_size=30, epochs=10, verbose=1, callbacks=[checkpoint],
                     validation_data=(x_val, y_val))
 
-model.save("out/augmented_classifier_deeper.h5")
-with open("out/augmented_classifier_deeper_history.pickle", "wb") as f:
+# Saving completed model and training history.
+model.save("out/classifier_augmented_deeper.h5")
+with open("out/classifier_augmented_deeper_history.pickle", "wb") as f:
     pickle.dump(history, f, pickle.HIGHEST_PROTOCOL)

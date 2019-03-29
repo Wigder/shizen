@@ -33,5 +33,5 @@ for w, p in priors.items():
 
 out = fw(dem_train, rep_train, prior=prior, cv=CountVectorizer(vocabulary=cv_vocab))
 
-with open("out/informed_z_scores.pickle", "wb") as f:
+with open("out/z_scores_informed.pickle", "wb") as f:
     pickle.dump(out, f, pickle.HIGHEST_PROTOCOL)

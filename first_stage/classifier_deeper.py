@@ -67,9 +67,11 @@ adam = Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 model.compile(optimizer=adam, loss="binary_crossentropy", metrics=["accuracy"])
 model.summary()
 
+# Running training.
 history = model.fit(x_train, y_train, batch_size=30, epochs=10, verbose=1, callbacks=[checkpoint],
                     validation_data=(x_val, y_val))
 
-model.save("out/augmented_classifier_deeper.h5")
-with open("out/augmented_classifier_deeper_history.pickle", "wb") as f:
+# Saving completed model and training history.
+model.save("out/classifier_deeper.h5")
+with open("out/classifier_deeper_history.pickle", "wb") as f:
     pickle.dump(history, f, pickle.HIGHEST_PROTOCOL)

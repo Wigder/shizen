@@ -3,7 +3,7 @@ import pickle
 import plotly.graph_objs as go
 import plotly.offline as py
 
-history_path = "out/baseline_classifier_history.pickle"
+history_path = "out/classifier_baseline_history.pickle"
 title = "Baseline"
 
 with open(history_path, "rb") as f:
@@ -52,7 +52,7 @@ layout_acc = go.Layout(
     showlegend=True
 )
 fig_acc = go.Figure(data=[train_acc_trace, val_acc_trace], layout=layout_acc)
-py.plot(fig_acc, filename=history_path.split(".pickle")[0] + "_acc_plot.html")
+py.plot(fig_acc, filename=history_path.split(".pickle")[0] + "_acc.html")
 
 train_loss_trace = go.Scatter(
     x=epochs,
@@ -92,4 +92,4 @@ layout_loss = go.Layout(
     showlegend=True
 )
 fig_loss = go.Figure(data=[train_loss_trace, val_loss_trace], layout=layout_loss)
-py.plot(fig_loss, filename=history_path.split(".pickle")[0] + "_loss_plot.html")
+py.plot(fig_loss, filename=history_path.split(".pickle")[0] + "_loss.html")

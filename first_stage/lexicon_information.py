@@ -10,9 +10,9 @@ with open("corpora/political/resplit/sanitised/rep_train.txt", encoding="utf-8")
 
 vocab_size = len(dict(Counter(" ".join(dem_train + rep_train).split()).most_common()))
 
-with open("out/uninformed_z_scores.pickle", "rb") as f:
+with open("out/z_scores_uninformed.pickle", "rb") as f:
     uninf = Counter(dict([(w, z) for w, z in pickle.load(f)])).most_common()
-with open("out/informed_z_scores.pickle", "rb") as f:
+with open("out/z_scores_informed.pickle", "rb") as f:
     inf = Counter(dict([(w, z) for w, z in pickle.load(f)])).most_common()
 
 uninf_partisan = [w for w, z in uninf if abs(z) > cutoff]
@@ -52,5 +52,5 @@ Top 50 words from informed calculation:
            inf[-50:][::-1],
            inf[:50])
 
-with open("out/lexicon_extraction_notes.txt", "w") as f:
+with open("out/notes_lexicon_extraction.txt", "w") as f:
     f.write(text)

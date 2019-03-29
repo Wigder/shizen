@@ -12,15 +12,15 @@ with open("corpora/political/resplit/sanitised/rep_train.txt", encoding="utf-8")
 word_freq = dict(Counter(" ".join(dem_train + rep_train).split()).most_common())
 
 cutoff = 1.96
-with open("out/uninformed_z_scores.pickle", "rb") as f:
-    uninf = [(w, z) for w, z in pickle.load(f) if abs(z) >= cutoff]
+with open("out/z_scores_uninformed.pickle", "rb") as f:
+    z_scores = [(w, z) for w, z in pickle.load(f) if abs(z) >= cutoff]
 
-# Full plot
-uninf_dem = [(w, z) for w, z in uninf if z > 0]
-uninf_rep = [(w, z) for w, z in uninf if z < 0]
+# Full plot.
+dem_z_scores = [(w, z) for w, z in z_scores if z > 0]
+rep_z_scores = [(w, z) for w, z in z_scores if z < 0]
 dem_trace = go.Scatter(
-    x=[word_freq[w] for w, _ in uninf_dem],
-    y=[z for _, z in uninf_dem],
+    x=[word_freq[w] for w, _ in dem_z_scores],
+    y=[z for _, z in dem_z_scores],
     name="Democrat",
     mode="markers",
     marker=dict(
@@ -28,8 +28,8 @@ dem_trace = go.Scatter(
     )
 )
 rep_trace = go.Scatter(
-    x=[word_freq[w] for w, _ in uninf_rep],
-    y=[z for _, z in uninf_rep],
+    x=[word_freq[w] for w, _ in rep_z_scores],
+    y=[z for _, z in rep_z_scores],
     name="Republican",
     mode="markers",
     marker=dict(
@@ -53,40 +53,39 @@ layout = go.Layout(
 fig = go.Figure(data=[dem_trace, rep_trace], layout=layout)
 py.plot(fig, filename="out/fightin_words.html")
 
-# Sample plot
-uninf_dict = dict(uninf)
+# Sample plot.
+z_scores_dict = dict(z_scores)
 """
 Sample words have been extracted randomly and handpicked through trial and error.
 """
-uninf_sample_dem = [(w, uninf_dict[w]) for w in
-                    ["engel", "popular", "high", "id", "san", "betty", "chellie", "spewing", "make", "electoral"]]
-uninf_sample_rep = [(w, uninf_dict[w]) for w in
-                    ["grassley", "abide", "pat", "eliminate", "stupid", "christ", "spineless", "mess", "already",
-                     "reid"]]
+dem_z_sample = [(w, z_scores_dict[w]) for w in
+                ["engel", "popular", "high", "id", "san", "betty", "chellie", "spewing", "make", "electoral"]]
+rep_z_sample = [(w, z_scores_dict[w]) for w in
+                ["grassley", "abide", "pat", "eliminate", "stupid", "christ", "spineless", "mess", "already", "reid"]]
 
 dem_trace_sample = go.Scatter(
-    x=[word_freq[w] for w, _ in uninf_sample_dem],
-    y=[z for _, z in uninf_sample_dem],
+    x=[word_freq[w] for w, _ in dem_z_sample],
+    y=[z for _, z in dem_z_sample],
     name="Democrat",
     mode="markers+text",
     marker=dict(
         color="steelblue"
     ),
-    text=[w for w, _ in uninf_sample_dem],
+    text=[w for w, _ in dem_z_sample],
     textposition="middle right",
     textfont=dict(
         size=11
     )
 )
 rep_trace_sample = go.Scatter(
-    x=[word_freq[w] for w, _ in uninf_sample_rep],
-    y=[z for _, z in uninf_sample_rep],
+    x=[word_freq[w] for w, _ in rep_z_sample],
+    y=[z for _, z in rep_z_sample],
     name="Republican",
     mode="markers+text",
     marker=dict(
         color="firebrick"
     ),
-    text=[w for w, _ in uninf_sample_rep],
+    text=[w for w, _ in rep_z_sample],
     textposition="middle right",
     textfont=dict(
         size=11
