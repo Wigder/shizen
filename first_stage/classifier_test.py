@@ -25,7 +25,7 @@ sequence_length = int(ceil(max(len(s) for s in dem_train + dem_val + rep_train +
 
 # Establishing vocab indices.
 tokenizer = Tokenizer()
-tokenizer.fit_on_texts(dem_train + dem_val + dem_test + rep_train + rep_val + rep_test)
+tokenizer.fit_on_texts((dem_train + dem_val + rep_train + rep_val) + (dem_test + rep_test))
 
 # Establishing padded samples.
 dem_test_samples = pad_sequences(tokenizer.texts_to_sequences(dem_test), maxlen=sequence_length)
