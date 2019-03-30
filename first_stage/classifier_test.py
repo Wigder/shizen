@@ -38,6 +38,8 @@ for p in rep_test_predictions:
         correct += 1
 rep_acc = correct / len(rep_test_predictions)
 
-# Writing results to file.
+# Printing results then writing to file.
+accuracy = "Democrats: {}\nRepublicans: {}\nAverage: {}\n".format(dem_acc, rep_acc, (dem_acc + rep_acc) / 2)
+print(accuracy)
 with open(model_path.split(".h5")[0] + "_accuracy.txt", "w") as f:
-    f.write("Democrats: {}\nRepublicans: {}\nAverage: {}\n".format(dem_acc, rep_acc, (dem_acc + rep_acc) / 2))
+    f.write(accuracy)

@@ -21,8 +21,9 @@ for w in model.wv.vocab:
     if w not in z_scores:
         model.wv.syn0[model.wv.vocab[w].index] = append(model_base.wv.syn0[model_base.wv.vocab[w].index], [0])
     else:
+        # Assigning 1 to the last dimension of the vector if the word has democrat or republican statistical relevance.
         model.wv.syn0[model.wv.vocab[w].index] = append(model_base.wv.syn0[model_base.wv.vocab[w].index], [1])
 
 model.clear_sims()
 
-model.save("out/augmented_word_embeddings.model")
+model.save("out/word_embeddings.model")
