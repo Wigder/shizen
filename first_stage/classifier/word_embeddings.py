@@ -5,10 +5,10 @@ from numpy import append
 
 cutoff = 1.96
 
-with open("corpora/political/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
-    dem_train = [s.rstrip().split() for s in f.readlines()]
-with open("corpora/political/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
-    rep_train = [s.rstrip().split() for s in f.readlines()]
+with open("corpora/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
+    dem_train = [s.split() for s in f.read().split("\n")]
+with open("corpora/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
+    rep_train = [s.split() for s in f.read().split("\n")]
 with open("out/z_scores_uninformed.pickle", "rb") as f:
     z_scores = dict([(w, z) for w, z in pickle.load(f) if abs(z) >= cutoff])
 

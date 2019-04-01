@@ -8,10 +8,10 @@ from classifier_load_data import data, sequence_length
 model_path = ""
 
 # Loading test data.
-with open("corpora/political/resplit/sanitised/dem_test.txt", encoding="utf-8") as f:
-    dem_test = [s.rstrip() for s in f.readlines()]
-with open("corpora/political/resplit/sanitised/rep_test.txt", encoding="utf-8") as f:
-    rep_test = [s.rstrip() for s in f.readlines()]
+with open("corpora/resplit/sanitised/dem_test.txt", encoding="utf-8") as f:
+    dem_test = f.read().split("\n")
+with open("corpora/resplit/sanitised/rep_test.txt", encoding="utf-8") as f:
+    rep_test = f.read().split("\n")
 
 # Establishing vocab indices.
 tokenizer = Tokenizer()

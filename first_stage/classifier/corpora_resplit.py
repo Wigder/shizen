@@ -2,17 +2,17 @@ from random import shuffle
 
 from sklearn.model_selection import train_test_split
 
-with open("corpora/political/original/democratic_only.train.en", encoding="utf-8") as f:
+with open("corpora/original/democratic_only.train.en", encoding="utf-8") as f:
     dem_train = f.readlines()
-with open("corpora/political/original/democratic_only.dev.en", encoding="utf-8") as f:
+with open("corpora/original/democratic_only.dev.en", encoding="utf-8") as f:
     dem_val = f.readlines()
-with open("corpora/political/original/democratic_only.test.en", encoding="utf-8") as f:
+with open("corpora/original/democratic_only.test.en", encoding="utf-8") as f:
     dem_test = f.readlines()
-with open("corpora/political/original/republican_only.train.en", encoding="utf-8") as f:
+with open("corpora/original/republican_only.train.en", encoding="utf-8") as f:
     rep_train = f.readlines()
-with open("corpora/political/original/republican_only.dev.en", encoding="utf-8") as f:
+with open("corpora/original/republican_only.dev.en", encoding="utf-8") as f:
     rep_val = f.readlines()
-with open("corpora/political/original/republican_only.test.en", encoding="utf-8") as f:
+with open("corpora/original/republican_only.test.en", encoding="utf-8") as f:
     rep_test = f.readlines()
 
 dem_data = dem_train + dem_val + dem_test
@@ -33,21 +33,21 @@ rep_val, rep_test = train_test_split(rep_val, test_size=0.5)
 # print(len(rep_val)/len(rep_data))
 # print(len(rep_test)/len(rep_data))
 
-with open("corpora/political/resplit/unsanitised/dem_train.txt", "w", encoding="utf-8") as f:
+with open("corpora/resplit/unsanitised/dem_train.txt", "w", encoding="utf-8") as f:
     for s in dem_train:
         f.write(s)
-with open("corpora/political/resplit/unsanitised/dem_val.txt", "w", encoding="utf-8") as f:
+with open("corpora/resplit/unsanitised/dem_val.txt", "w", encoding="utf-8") as f:
     for s in dem_val:
         f.write(s)
-with open("corpora/political/resplit/unsanitised/dem_test.txt", "w", encoding="utf-8") as f:
+with open("corpora/resplit/unsanitised/dem_test.txt", "w", encoding="utf-8") as f:
     for s in dem_test:
         f.write(s)
-with open("corpora/political/resplit/unsanitised/rep_train.txt", "w", encoding="utf-8") as f:
+with open("corpora/resplit/unsanitised/rep_train.txt", "w", encoding="utf-8") as f:
     for s in rep_train:
         f.write(s)
-with open("corpora/political/resplit/unsanitised/rep_val.txt", "w", encoding="utf-8") as f:
+with open("corpora/resplit/unsanitised/rep_val.txt", "w", encoding="utf-8") as f:
     for s in rep_val:
         f.write(s)
-with open("corpora/political/resplit/unsanitised/rep_test.txt", "w", encoding="utf-8") as f:
+with open("corpora/resplit/unsanitised/rep_test.txt", "w", encoding="utf-8") as f:
     for s in rep_test:
         f.write(s)

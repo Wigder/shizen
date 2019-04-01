@@ -4,10 +4,10 @@ from collections import Counter
 import plotly.graph_objs as go
 import plotly.offline as py
 
-with open("corpora/political/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
-    dem_train = [s.rstrip() for s in f.readlines()]
-with open("corpora/political/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
-    rep_train = [s.rstrip() for s in f.readlines()]
+with open("corpora/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
+    dem_train = f.read().split("\n")
+with open("corpora/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
+    rep_train = f.read().split("\n")
 
 word_freq = dict(Counter(" ".join(dem_train + rep_train).split()).most_common())
 

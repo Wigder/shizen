@@ -20,14 +20,14 @@ def save_outputs(model, history, file_path_absolute):
 
 
 # Loading and labelling data.
-with open("corpora/political/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
-    dem_train = [(s.rstrip(), 1) for s in f.readlines()]
-with open("corpora/political/resplit/sanitised/dem_val.txt", encoding="utf-8") as f:
-    dem_val = [(s.rstrip(), 1) for s in f.readlines()]
-with open("corpora/political/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
-    rep_train = [(s.rstrip(), 0) for s in f.readlines()]
-with open("corpora/political/resplit/sanitised/rep_val.txt", encoding="utf-8") as f:
-    rep_val = [(s.rstrip(), 0) for s in f.readlines()]
+with open("corpora/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
+    dem_train = [(s, 1) for s in f.read().split("\n")]
+with open("corpora/resplit/sanitised/dem_val.txt", encoding="utf-8") as f:
+    dem_val = [(s, 1) for s in f.read().split("\n")]
+with open("corpora/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
+    rep_train = [(s, 0) for s in f.read().split("\n")]
+with open("corpora/resplit/sanitised/rep_val.txt", encoding="utf-8") as f:
+    rep_val = [(s, 0) for s in f.read().split("\n")]
 
 data = dem_train + dem_val + rep_train + rep_val
 
