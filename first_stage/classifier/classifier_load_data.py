@@ -13,8 +13,8 @@ from math import ceil
 # Function for saving model, its history, and its graphical architecture.
 def save_outputs(model, history, file_path_absolute):
     name = basename(file_path_absolute).split(".py")[0]
-    plot_model(model, to_file="out/{}_architecture.png".format(name), show_shapes=True, show_layer_names=False)
     model.save("out/{}.h5".format(name))
+    plot_model(model, to_file="out/{}_architecture.png".format(name), show_shapes=True, show_layer_names=False)
     with open("out/{}_history.pickle".format(name), "wb") as f:
         pickle.dump(history, f, pickle.HIGHEST_PROTOCOL)
 

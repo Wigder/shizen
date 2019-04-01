@@ -3,11 +3,13 @@ from string import punctuation
 from langid import classify, set_languages
 from sklearn.model_selection import train_test_split
 
+print("Loading data...")
 with open("corpora/custom/unsanitised/data.en", encoding="utf-8") as f:
     data_en = f.read().split("\n")
 with open("corpora/custom/unsanitised/data.fr", encoding="utf-8") as f:
     data_fr = f.read().split("\n")
 
+print("Zipping English and French sets together...")
 assert len(data_en) == len(data_fr)
 data = list(zip(data_en, data_fr))
 
@@ -23,10 +25,12 @@ data = list(set(data))
 # multiple source sentences.
 print("Removing repeating source/target sentences...")
 new_data = []
+seen_en = []
+seen_fr = []
 for en, fr in data:
-    current_en = [en for en, _ in new_data]
-    current_fr = [fr for _, fr in new_data]
-    if en not in current_en and fr not in current_fr:
+    if en not in seen_en and fr not in seen_fr:
+        seen_en.append(en)
+        seen_fr.append(fr)
         new_data.append((en, fr))
 data = new_data
 
