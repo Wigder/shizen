@@ -1,7 +1,8 @@
 from keras.models import load_model
 from keras.preprocessing.sequence import pad_sequences
+from keras.preprocessing.text import Tokenizer
 
-from classifier_load_data import tokenizer, sequence_length
+from classifier_load_data import data, sequence_length
 
 # Trained model in HDF5 format.
 model_path = ""
@@ -11,6 +12,10 @@ with open("corpora/resplit/sanitised/dem_test.txt", encoding="utf-8") as f:
     dem_test = f.read().split("\n")
 with open("corpora/resplit/sanitised/rep_test.txt", encoding="utf-8") as f:
     rep_test = f.read().split("\n")
+
+# Establishing vocab indices.
+tokenizer = Tokenizer()
+tokenizer.fit_on_texts([s for s, _ in data] + dem_test + rep_test)
 
 # Establishing padded samples.
 dem_test_samples = pad_sequences(tokenizer.texts_to_sequences(dem_test), maxlen=sequence_length)

@@ -9,8 +9,6 @@ from keras.preprocessing.text import Tokenizer
 from keras.utils import plot_model
 from math import ceil
 
-from word_embeddings import embedding_dimensions, lexicon_membership_dimensions
-
 
 # Function for saving model, its history, and its graphical architecture.
 def save_outputs(model, history, file_path_absolute):
@@ -31,15 +29,15 @@ with open("corpora/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
 with open("corpora/resplit/sanitised/rep_val.txt", encoding="utf-8") as f:
     rep_val = [(s, 0) for s in f.read().split("\n")]
 
-data = [s for s, _ in dem_train + dem_val + rep_train + rep_val]
+data = dem_train + dem_val + rep_train + rep_val
 
 # Calculating max sentence length and rounding to nearest multiple of 50.
 multiple = 50.0
-sequence_length = int(ceil(max([len(s.split()) for s in data]) / multiple) * multiple)
+sequence_length = int(ceil(max([len(s.split()) for s, _ in data]) / multiple) * multiple)
 
 # Establishing vocab indices.
 tokenizer = Tokenizer()
-tokenizer.fit_on_texts(data)
+tokenizer.fit_on_texts([s for s, _ in data])
 
 # Establishing padded and sequencified data sets as well as their respective labels.
 train = dem_train + rep_train
@@ -54,7 +52,7 @@ y_val = np.asarray([l for _, l in val])
 # Loading pre-trained word embeddings and assigning them to their respective generated indices.
 w2v_model = Word2Vec.load("out/word_embeddings.model")
 vocab_size = len(tokenizer.word_index) + 1
-dimensions = embedding_dimensions + lexicon_membership_dimensions
+dimensions = 101
 embeddings = np.zeros((vocab_size, dimensions))
 for w, i in tokenizer.word_index.items():
     if w in w2v_model.wv.vocab:

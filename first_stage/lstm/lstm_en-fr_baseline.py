@@ -61,7 +61,7 @@ for i, (input_text, target_text) in enumerate(zip(inputs, targets)):
         if t > 0:
             decoder_target_data[i, t - 1, target_token_index[c]] = 1.
 
-latent_dim = 256
+latent_dim = 500
 
 encoder_inputs = Input(shape=(None, num_encoder_tokens))
 encoder = LSTM(latent_dim, return_state=True)

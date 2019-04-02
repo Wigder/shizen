@@ -1,4 +1,4 @@
-from keras.layers import Input, Embedding, Reshape, Conv2D, MaxPool2D, Concatenate, Flatten, Dropout, Dense
+from keras.layers import Input, Dense, Embedding, Conv2D, MaxPool2D, Reshape, Flatten, Dropout, Concatenate
 from keras.models import Model
 from keras.optimizers import Adam
 
@@ -21,8 +21,8 @@ conv_2 = Conv2D(filters, kernel_size=(filter_sizes[2], dimensions), kernel_initi
 maxpool_0 = MaxPool2D(pool_size=(sequence_length - filter_sizes[0] + 1, 1), strides=(1, 1))(conv_0)
 maxpool_1 = MaxPool2D(pool_size=(sequence_length - filter_sizes[1] + 1, 1), strides=(1, 1))(conv_1)
 maxpool_2 = MaxPool2D(pool_size=(sequence_length - filter_sizes[2] + 1, 1), strides=(1, 1))(conv_2)
-concatenated = Concatenate(axis=1)([maxpool_0, maxpool_1, maxpool_2])
-flatten = Flatten()(concatenated)
+concatenated_tensor = Concatenate(axis=1)([maxpool_0, maxpool_1, maxpool_2])
+flatten = Flatten()(concatenated_tensor)
 dropout = Dropout(0.5)(flatten)
 output = Dense(1, activation="sigmoid")(dropout)
 model = Model(inputs=inputs, outputs=output)

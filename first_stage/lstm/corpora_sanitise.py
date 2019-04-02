@@ -24,15 +24,7 @@ data = list(set(data))
 # Removing repeating source sentences aligned to multiple target sentences and repeating target sentences aligned to
 # multiple source sentences.
 print("Removing repeating source/target sentences...")
-new_data = []
-seen_en = []
-seen_fr = []
-for en, fr in data:
-    if en not in seen_en and fr not in seen_fr:
-        seen_en.append(en)
-        seen_fr.append(fr)
-        new_data.append((en, fr))
-data = new_data
+data = [(k, v) for v, k in dict([(v, k) for k, v in dict(data).items()]).items()]
 
 # Removing sentences that are not in the specified source or target language.
 print("Removing sentences that are not in the specified source or target language...")
