@@ -1,5 +1,6 @@
 from keras.models import load_model
 from keras.preprocessing.sequence import pad_sequences
+from sklearn.metrics import accuracy_score
 
 from classifier_load_data import tokenizer, sequence_length
 
@@ -18,20 +19,12 @@ rep_test_samples = pad_sequences(tokenizer.texts_to_sequences(rep_test), maxlen=
 
 # Loading model and running predictions.
 model = load_model(model_path)
-dem_test_predictions = [p[0] for p in model.predict(x=dem_test_samples).tolist()]
-rep_test_predictions = [p[0] for p in model.predict(x=rep_test_samples).tolist()]
+dem_test_predictions = [1 if p[0] >= 0.5 else 0 for p in model.predict(x=dem_test_samples).tolist()]
+rep_test_predictions = [0 if p[0] < 0.5 else 1 for p in model.predict(x=rep_test_samples).tolist()]
 
 # Calculating overall accuracy.
-correct = 0
-for p in dem_test_predictions:
-    if p > 0.5:
-        correct += 1
-dem_acc = correct / len(dem_test_predictions)
-correct = 0
-for p in rep_test_predictions:
-    if p < 0.5:
-        correct += 1
-rep_acc = correct / len(rep_test_predictions)
+dem_acc = accuracy_score([1 for i in dem_test_predictions], dem_test_predictions)
+rep_acc = accuracy_score([0 for i in rep_test_predictions], rep_test_predictions)
 
 # Printing results then writing to file.
 accuracy = "Democrats: {}\nRepublicans: {}\nAverage: {}\n".format(dem_acc, rep_acc, (dem_acc + rep_acc) / 2)
