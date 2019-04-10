@@ -1,13 +1,13 @@
 from keras.layers import Input, Embedding, Reshape, Conv2D, MaxPool2D, Flatten, Dropout, Dense
 from keras.models import Model
 
-from classifier_load_data import sequence_length, vocab_size, dimensions, embeddings, x_train, y_train, x_val, y_val, \
-    save_outputs
+from classifier_load_data import sequence_length, vocab_size, dimensions, load_word_embeddings, x_train, y_train, \
+    x_val, y_val, save_outputs
 
 # Building architecture.
 kernel_size = 5
 inputs = Input(shape=(sequence_length,), dtype="int32")
-embedding = Embedding(vocab_size, dimensions, weights=[embeddings], input_length=sequence_length,
+embedding = Embedding(vocab_size, dimensions, weights=[load_word_embeddings()], input_length=sequence_length,
                       trainable=False)(inputs)
 reshape = Reshape((sequence_length, dimensions, 1))(embedding)
 conv = Conv2D(100, kernel_size=(kernel_size, dimensions), kernel_initializer="normal", activation="relu")(reshape)
@@ -23,4 +23,4 @@ model.summary()
 history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=10, batch_size=30)
 
 # Saving completed model, training history, and graphical architecture.
-save_outputs(model, history, __file__)
+save_outputs(model, history, "Augmented", __file__)

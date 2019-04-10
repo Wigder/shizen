@@ -21,4 +21,4 @@ model.summary()
 history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=10, batch_size=30)
 
 # Saving completed model, training history, and graphical architecture.
-save_outputs(model, history, __file__)
+save_outputs(model, history, "Baseline", __file__)
