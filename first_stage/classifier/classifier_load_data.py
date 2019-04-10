@@ -1,30 +1,12 @@
-import pickle
-from os.path import basename
 from random import shuffle
 
 import numpy as np
 from gensim.models import Word2Vec
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
-from keras.utils import plot_model
 from math import ceil
 
-from classifier_plot_helper import plot_history
-from classifier_test import calculate_accuracy
 from word_embeddings import embedding_dimensions, lexicon_membership_dimensions
-
-
-# Function for saving model, its test accuracy, its history, its history plot, its graphical architecture.
-def save_outputs(model, history, title, file_path_absolute, y_range=None):
-    name = basename(file_path_absolute).split(".py")[0]
-    model_path = "out/{}.h5".format(name)
-    model.save(model_path)
-    calculate_accuracy(model_path)
-    with open("out/{}_history.pickle".format(name), "wb") as f:
-        pickle.dump(history, f, pickle.HIGHEST_PROTOCOL)
-    plot_history(title, file_path_absolute, y_range=y_range)
-    plot_model(model, to_file="out/{}_architecture.png".format(name), show_shapes=True, show_layer_names=False)
-
 
 # Loading and labelling data.
 with open("corpora/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:

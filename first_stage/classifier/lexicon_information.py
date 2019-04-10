@@ -1,7 +1,7 @@
 import pickle
 from collections import Counter
 
-cutoff = 1.96
+from word_embeddings import cutoff
 
 with open("corpora/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
     dem_train = f.read().split("\n")

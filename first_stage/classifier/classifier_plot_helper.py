@@ -5,9 +5,8 @@ import plotly.graph_objs as go
 import plotly.offline as py
 
 
-def plot_history(title, file_path_absolute, y_range=None):
-    name = basename(file_path_absolute).split("_plot.py")[0] + "_history"
-    history_path = "out/{}.pickle".format(name)
+def plot_history(title, history_path, y_range=None):
+    name = basename(history_path).split(".pickle")[0]
     with open(history_path, "rb") as f:
         history = pickle.load(f)
 

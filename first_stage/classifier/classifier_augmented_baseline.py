@@ -2,7 +2,8 @@ from keras.layers import Input, Embedding, Reshape, Conv2D, MaxPool2D, Flatten, 
 from keras.models import Model
 
 from classifier_load_data import sequence_length, vocab_size, dimensions, load_word_embeddings, x_train, y_train, \
-    x_val, y_val, save_outputs
+    x_val, y_val
+from classifier_utils import save_outputs
 
 # Building architecture.
 kernel_size = 5

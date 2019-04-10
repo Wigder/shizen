@@ -6,9 +6,9 @@ from numpy import append
 
 embedding_dimensions = 300
 lexicon_membership_dimensions = 2
+cutoff = 1.96
 
 if __name__ == "__main__":
-    cutoff = 1.96
     with open("corpora/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
         dem_train = [s.split() for s in f.read().split("\n")]
     with open("corpora/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
