@@ -1,5 +1,5 @@
-import pickle
 from os.path import basename
+from pickle import load
 
 from gensim.models import Word2Vec
 from numpy import append
@@ -13,7 +13,7 @@ with open("corpora/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
 with open("corpora/resplit/sanitised/rep_train.txt", encoding="utf-8") as f:
     rep_train = [s.split() for s in f.read().split("\n")]
 with open("out/z_scores_uninformed.pickle", "rb") as f:
-    z_scores = dict([(w, z) for w, z in pickle.load(f) if abs(z) >= cutoff])
+    z_scores = dict([(w, z) for w, z in load(f) if abs(z) >= cutoff])
 
 data = dem_train + rep_train
 model_base = Word2Vec(sentences=data, min_count=1, size=embedding_dimensions)
