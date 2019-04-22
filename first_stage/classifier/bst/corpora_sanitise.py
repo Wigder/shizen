@@ -36,19 +36,19 @@ with open("corpora/resplit/unsanitised/rep_test.txt", encoding="utf-8") as f:
 
 with open("corpora/resplit/sanitised/dem_train.txt", "w") as f:
     for s in dem_train:
-        f.write("{}\n".format(s))
+        f.write("{}\n".format(s.strip()))
 with open("corpora/resplit/sanitised/dem_val.txt", "w") as f:
     for s in dem_val:
-        f.write("{}\n".format(s))
+        f.write("{}\n".format(s.strip()))
 with open("corpora/resplit/sanitised/dem_test.txt", "w") as f:
     for s in dem_test:
-        f.write("{}\n".format(s))
+        f.write("{}\n".format(s.strip()))
 with open("corpora/resplit/sanitised/rep_train.txt", "w") as f:
     for s in rep_train:
-        f.write("{}\n".format(s))
+        f.write("{}\n".format(s.strip()))
 with open("corpora/resplit/sanitised/rep_val.txt", "w") as f:
     for s in rep_val:
-        f.write("{}\n".format(s))
+        f.write("{}\n".format(s.strip()))
 with open("corpora/resplit/sanitised/rep_test.txt", "w") as f:
     for s in rep_test:
-        f.write("{}\n".format(s))
+        f.write("{}\n".format(s.strip()))

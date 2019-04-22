@@ -4,6 +4,8 @@ from os.path import basename
 import plotly.graph_objs as go
 import plotly.offline as py
 
+smoothing = 1.3
+
 
 def plot_history(title, history_path, y_range=None):
     name = basename(history_path).split(".pickle")[0]
@@ -23,7 +25,7 @@ def plot_history(title, history_path, y_range=None):
         name="Training",
         line=dict(
             shape="spline",
-            smoothing=1.3,
+            smoothing=smoothing,
             color="steelblue"
         )
     )
@@ -34,7 +36,7 @@ def plot_history(title, history_path, y_range=None):
         name="Validation",
         line=dict(
             shape="spline",
-            smoothing=1.3,
+            smoothing=smoothing,
             color="firebrick"
         )
     )
@@ -62,7 +64,7 @@ def plot_history(title, history_path, y_range=None):
         name="Training",
         line=dict(
             shape="spline",
-            smoothing=1.3,
+            smoothing=smoothing,
             color="steelblue"
         )
     )
@@ -73,7 +75,7 @@ def plot_history(title, history_path, y_range=None):
         name="Validation",
         line=dict(
             shape="spline",
-            smoothing=1.3,
+            smoothing=smoothing,
             color="firebrick"
         )
     )

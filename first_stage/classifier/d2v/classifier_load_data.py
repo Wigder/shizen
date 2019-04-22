@@ -1,12 +1,9 @@
 from random import shuffle
 
 import numpy as np
-from gensim.models import Word2Vec
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from math import ceil
-
-from word_embeddings import embedding_dimensions, lexicon_membership_dimensions
 
 # Loading and labelling data.
 with open("corpora/resplit/sanitised/dem_train.txt", encoding="utf-8") as f:
@@ -40,14 +37,4 @@ y_val = np.asarray([l for _, l in val])
 
 # Function for loading pre-trained word embeddings and assigning them to their respective generated indices.
 vocab_size = len(tokenizer.word_index) + 1
-dimensions = embedding_dimensions + lexicon_membership_dimensions
-
-
-def load_word_embeddings():
-    w2v_model = Word2Vec.load("out/word_embeddings.model")
-    embeddings = np.zeros((vocab_size, dimensions))
-    for w, i in tokenizer.word_index.items():
-        if w in w2v_model.wv.vocab:
-            embeddings[i] = w2v_model.wv.syn0[w2v_model.wv.vocab[w].index]
-
-    return embeddings
+dimensions = 302

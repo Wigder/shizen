@@ -186,3 +186,6 @@ corpora/
 
 # Outputs
 out/
+
+# Classifier model in LSTM folder
+first_stage/lstm/classifier*
