@@ -27,17 +27,11 @@ def train_doc2vec(doc):
     return model
 
 
-with open("corpora/resplit/sanitised/dem_test.txt", encoding="utf-8") as f:
-    dem_test = f.read().split("\n")
-with open("corpora/resplit/sanitised/rep_test.txt", encoding="utf-8") as f:
-    rep_test = f.read().split("\n")
+with open("corpora/tokenised/ja", encoding="utf-8") as f:
+    corpus = f.read().split("\n")
 
-dem_td = tagged_document(dem_test)
-rep_td = tagged_document(rep_test)
+td = tagged_document(corpus)
 
 if __name__ == "__main__":
-    dem_model = train_doc2vec(dem_td)
-    rep_model = train_doc2vec(rep_td)
-
-    dem_model.save("out/d2v_dem.doc2vec")
-    rep_model.save("out/d2v_rep.doc2vec")
+    md = train_doc2vec(td)
+    md.save("out/d2v.doc2vec")

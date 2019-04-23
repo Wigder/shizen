@@ -93,5 +93,5 @@ results = results.rstrip() + "\n"
 
 print(results)
 
-with open("out/results.txt", "w") as f:
+with open("out/results.txt", "w", encoding="utf-8") as f:
     f.write(results)

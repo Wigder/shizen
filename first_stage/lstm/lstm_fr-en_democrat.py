@@ -38,7 +38,7 @@ class CollectPredictions(Callback):
 
     def on_batch_end(self, batch, logs=None):
         self.pred = eval(self.var_y_pred)
-        # print("Predictions: ", self.pred)  # By running this line we can see that our strange live predictions.
+        # print("Predictions: ", self.pred)  # By uncommenting this line we can see strange live predictions.
         global classification_loss
         if self.pred.size != 0:
             sentences = []

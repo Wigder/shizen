@@ -52,5 +52,5 @@ Top 50 words from informed calculation:
            inf[-50:][::-1],
            inf[:50])
 
-with open("out/notes_lexicon_extraction.txt", "w") as f:
+with open("out/notes_lexicon_extraction.txt", "w", encoding="utf-8") as f:
     f.write(text)
