@@ -43,13 +43,26 @@ def transfer_style(sentence, model, doc):
 translator = Translator()
 dem_label = 1
 rep_label = 0
-dem_sentences = ["as a hoosier, i thank you, rep. visclosky.",
-                 "thank you for standing up for justice and against bigotry"
-                 "--racism, homophobia, sexism, misogyny, religious and xenophobia.",
-                 "thank you for all you are doing for us, attorney general harris!"]
-rep_sentences = ["i will continue praying for you and the decisions made by our government!",
-                 "tom, i wish u would bring change.",
-                 "all talk and no action-why dont you have some guts like breitbart"]
+dem_sentences = ["we need to keep democrats in the white house",
+                 "just vote for bernie and forget the others",
+                 "i am a life long proud and vocal democrat",
+                 "thank you for your vote sen klobuchar",
+                 "please run for president in 2020 senator corey"
+                 "hey chuck how about you stop casting yes votes for all his cabinet picks",
+                 "i dont see trump supporters rioting",
+                 "so sorry for your loss my deepest condolences to you and your family",
+                 "senator warren i respect you",
+                 "get a grip elizabeth"]
+rep_sentences = ["stand for liberty and the constitution",
+                 "too bad you were too spineless to back him",
+                 "youre a fraud paul",
+                 "sorry senator but you have done nothing to secure our borders",
+                 "keep it up senator mccain",
+                 "the obama administration are just buying time",
+                 "stick to your principles and support of the constitution mia",
+                 "oh little marco how does it feel to sell your soul to the devil",
+                 "you guys have lost touch with the american people",
+                 "we the people have had just about enough of him playing dictator of our country"]
 
 # Back translating sentences.
 dem_back_trans = [back_translate(s, translator) for s in dem_sentences]
@@ -93,5 +106,5 @@ results = results.rstrip() + "\n"
 
 print(results)
 
-with open("out/results.txt", "w", encoding="utf-8") as f:
+with open("out/results_appendix.txt", "w", encoding="utf-8") as f:
     f.write(results)
