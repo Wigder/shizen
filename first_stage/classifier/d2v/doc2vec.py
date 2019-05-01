@@ -14,7 +14,7 @@ def tagged_document(sentence_list):
 def train_doc2vec(doc):
     epochs = 20
     alpha_val = 0.025
-    min_alpha_val = 1e-4
+    min_alpha_val = 0.0001
     alpha_delta = (alpha_val - min_alpha_val) / (epochs - 1)
     model = Doc2Vec(vector_size=300, workers=4)
     model.build_vocab(doc)
