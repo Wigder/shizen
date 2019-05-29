@@ -188,8 +188,3 @@ corpora/resplit/unsanitised/*
 
 # Outputs
 out/*
-
-# Other folders unrelated to this branch
-first_stage/
-second_stage/
-tutorial/
