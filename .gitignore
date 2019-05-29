@@ -153,7 +153,7 @@ cmake-build-*/
 *.iws
 
 # IntelliJ
-out/
+# out/  # This needs to be commented because we have a project folder called "out".
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -182,10 +182,14 @@ fabric.properties
 desktop.ini
 
 # Corpora
-corpora/
+corpora/original/*
+corpora/resplit/sanitised/*
+corpora/resplit/unsanitised/*
 
 # Outputs
-out/
+out/*
 
-# Classifier model in LSTM folder
-first_stage/lstm/classifier*
+# Other folders unrelated to this branch
+first_stage/
+second_stage/
+tutorial/
