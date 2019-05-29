@@ -33,7 +33,9 @@ This should correctly reproduce the main style transfer experiment, saving outpu
 
 Bibliography
 ---
-S. Prabhumoye et al., “Style Transfer Through BackTranslation,” in Association for Computational Linguistics, 2018, pp. 866–876.
+S. Prabhumoye et al., “Style Transfer Through Back-Translation,” in Association for Computational Linguistics, 2018, pp. 866–876.
+
+T. Shen et al., “Style Transfer from Non-Parallel Text by Cross-Alignment,” in Neural Information Processing Systems, 2017.
 
 Q. Le and T. Mikolov, “Distributed Representations of Sentences and Documents,” in International Conference on Machine Learning, 2014.
 
