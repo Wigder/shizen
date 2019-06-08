@@ -22,8 +22,8 @@ Firstly, it is necessary to download the political corpus from RtGender and plac
 </p>
 Then, scripts may be run in the following order:
 
-1. corpora_sanitise.py
-2. corpora_resplit.py
+1. corpora_resplit.py
+2. corpora_sanitise.py
 3. classifier_baseline.py
 4. doc2vec.py
 5. style_transfer.py
