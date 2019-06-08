@@ -1,4 +1,4 @@
-# Non-generative Textual Style Transfer
+# Non-Generative Textual Style Transfer
 This is the implementation of my dissertation, written in part fulfilment for my bachelor's degree at the University of York in the UK. See [_report.pdf_](report.pdf) for the write-up. In short, I come up with a simple non-generative novel mechanism based on doc2vec that performs textual style transfer. The code published here comprises the content illustrated solely under section 2.4 within [_report.pdf_](report.pdf). Other content is not included.
 
 See the table below, extracted from the report, for a demonstration of the capabilities of the developed method:
